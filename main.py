@@ -1,7 +1,5 @@
 #set API key
 import json
-from os import environ
-from xml.etree.ElementInclude import include
 import requests
 import discord
 from random_word import RandomWords
