@@ -2,13 +2,16 @@
 import json
 import requests
 import discord
+from discord.ext import commands
 from random_word import RandomWords
 import vars
 
 apikey = vars.APIKEY
 lmt = 1
 ckey = "zzzz" # the client key
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='$', intents=intents)
 randWrd = RandomWords()
 
 def get_gif():
@@ -23,17 +26,14 @@ def get_gif():
         print(r.status_code)
         top_gif = None
 
-@client.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+@bot.command()
+async def on_ready(self):
+    print('We have logged in as {0.user}'.format(self))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.command()
+async def gif(ctx):
+    gif = get_gif()
+    await ctx.send(gif)
 
-    if message.content.startswith('$gif'):
-        gif = get_gif()
-        await message.channel.send(gif)
 
-client.run(vars.TOKEN)
+bot.run(vars.TOKEN)
